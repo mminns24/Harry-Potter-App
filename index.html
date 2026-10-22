@@ -157,7 +157,7 @@
         <button class="house-choice" data-house="Ravenclaw" type="button"><span class="house-icon" aria-hidden="true">🦅</span><strong>Ravenclaw</strong><span>Wisdom · Wit</span></button>
         <button class="house-choice" data-house="Hufflepuff" type="button"><span class="house-icon" aria-hidden="true">🦡</span><strong>Hufflepuff</strong><span>Loyalty · Patience</span></button>
       </div>
-      <div class="fine">Your house selection is saved to your player account on this browser.</div>
+      <div class="fine">Your house and wizard identity will be saved securely to your online account.</div>
     </section>
 
     <!-- HOUSE CHOSEN / CREATE ACCOUNT -->
@@ -175,14 +175,14 @@
       </div>
       <form id="createForm">
         <div class="field-grid">
-          <label class="field">Choose a username<input id="newUsername" name="username" autocomplete="username" minlength="3" maxlength="24" placeholder="e.g. midnightmarauder" required></label>
-          <label class="field">Choose a test password<input id="newPassword" name="password" type="password" autocomplete="new-password" minlength="4" placeholder="At least 4 characters" required></label>
+          <label class="field">Email address<input id="newUsername" name="email" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+          <label class="field">Choose a password<input id="newPassword" name="password" type="password" autocomplete="new-password" minlength="6" placeholder="At least 6 characters" required></label>
         </div>
         <button class="main-btn full" type="submit">Enter the Great Hall →</button>
         <div id="signupMessage" class="notice" role="status"></div>
       </form>
       <div class="center" style="margin-top:12px"><button id="backToHouses" class="back-link" type="button">← Choose a different house</button></div>
-      <p class="fine center" style="margin-top:16px">Local demo accounts only. Don't use a real password.</p>
+      <p class="fine center" style="margin-top:16px">Accounts are protected by Supabase Authentication. You may need to confirm your email address.</p>
     </section>
 
     <!-- RETURNING LOG IN -->
@@ -191,8 +191,8 @@
       <h2>Welcome Back</h2>
       <p>Continue your marathon where you left off.</p>
       <form id="loginForm">
-        <label class="field">Username<input id="loginUsername" name="username" autocomplete="username" placeholder="Your username" required></label>
-        <label class="field">Password<input id="loginPassword" name="password" type="password" autocomplete="current-password" placeholder="Your test password" required></label>
+        <label class="field">Email address<input id="loginUsername" name="email" type="email" autocomplete="email" placeholder="Your email" required></label>
+        <label class="field">Password<input id="loginPassword" name="password" type="password" autocomplete="current-password" placeholder="Your password" required></label>
         <button class="main-btn full" type="submit" style="margin-top:7px">Return to the Great Hall →</button>
         <div id="loginMessage" class="notice" role="status"></div>
       </form>
@@ -229,30 +229,33 @@
         <div class="scorecard">
           <div class="eyebrow">The House Cup</div>
           <h2 id="scoreTitle">The House Points Hourglasses</h2>
-          <p class="subtitle">Your house's points join others earned by players saved on this browser.</p>
+          <p class="subtitle">Everyone's house points are shared and update across devices.</p>
           <div id="hourglasses" class="hourglasses" aria-label="House points"></div>
           <div class="personal-total"><strong id="totalPoints">0</strong><span>Your personal<br>house points</span></div>
         </div>
       </section>
-      <footer class="footer">Your name, house, and counters save automatically on this browser.<br>Clearing website data or using another device will not carry your scores over.<br>Unofficial fan-made marathon tracker.</footer>
+      <footer class="footer">Your wizard name, house, and counters save to your Supabase account.<br>House points synchronize across players, even on different devices.<br>Unofficial fan-made marathon tracker.</footer>
     </main>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     'use strict';
-    // All logins and stats stay in this browser. No database or server required.
-    // This is a local demo, not secure authentication across devices.
-    const STORAGE_USERS = 'wizard_marathon_players_v1';
-    const STORAGE_SESSION = 'wizard_marathon_current_v1';
+    // Connected to this marathon's Supabase project.
+    // The publishable key is intended for browser apps; database access is protected by RLS.
+    // NEVER paste an sb_secret_.../service_role key or database password into GitHub.
+    const SUPABASE_URL = 'https://hkkoavagcihbzansolwf.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_qiYDHpR1syl8FrRdHOEHrg_ZAgM-bHJ';
+    const CONFIGURED = SUPABASE_URL.startsWith('https://') && SUPABASE_PUBLISHABLE_KEY.startsWith('sb_publishable_');
+    const db = CONFIGURED && window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY) : null;
+
     const HOUSES = {
       Gryffindor:{icon:'🦁', color:'#a62931',light:'#e8b767',soft:'rgba(166,41,49,.22)'},
       Slytherin:{icon:'🐍', color:'#136e45',light:'#b7d6bd',soft:'rgba(19,110,69,.25)'},
       Ravenclaw:{icon:'🦅', color:'#265ca0',light:'#d0a878',soft:'rgba(38,92,160,.24)'},
       Hufflepuff:{icon:'🦡', color:'#b58a1e',light:'#f3d479',soft:'rgba(181,138,30,.23)'}
     };
-    // Put these PNGs in the SAME GitHub folder as index.html.
-    // 'brandy.png' is optional for now; an emoji appears until an image is added.
     const ITEMS = [
       {id:'butterbeer', label:'Butterbeer', image:'butterbeer.png', emoji:'🍺'},
       {id:'polyjuice', label:'Polyjuice Potion', image:'polyjuice.png', altImage:'polyjuicepotion.png', emoji:'🧪'},
@@ -265,22 +268,11 @@
     const POINTS_PER_ITEM = 10;
     const FIRST_NAMES = ['Alaric','Luna','Cedric','Elowen','Rowan','Gideon','Mira','Aurelia','Felix','Cassian','Theodore','Willow','Orion','Isolde','Marlowe','Nimue','Jasper','Lyra','Merlin','Edric','Astrid','Ophelia','Silas','Elara','Briar','Lucien','Dorian','Selene'];
     const MIDDLE_NAMES = ['Finn','Moon','Everhart','Wren','Storm','Thistle','Ash','Sage','Bramble','Fable','Frost','Hollow','Quill','Briar','Dusk','Rune','Flint','Starling','Rowan','Hawthorne','Silver','Ember','Vale','Basil','Fox','Wolfe','Mist'];
-    // Canonical spellings: Weasley and Granger.
     const SURNAMES = ['Potter','Weasley','Granger','Malfoy','Snape'];
     const $ = id => document.getElementById(id);
-    let chosenHouse = null;
-    let proposedName = '';
-    let activeUsername = null;
-    let toastTimer;
+    let chosenHouse = null, proposedName = '', activeUser = null, activePlayer = null;
+    let allPlayers = [], toastTimer, scoreSubscription = null, refreshInProgress = false, needsRefresh = false;
 
-    function getUsers() {
-      try {
-        const obj = JSON.parse(localStorage.getItem(STORAGE_USERS));
-        return obj && typeof obj === 'object' && !Array.isArray(obj) ? obj : {};
-      } catch { return {}; }
-    }
-    function saveUsers(users) {localStorage.setItem(STORAGE_USERS, JSON.stringify(users));}
-    function normalizeUsername(value) {return value.trim().toLowerCase();}
     function showScreen(id) {
       ['houseScreen','setupScreen','loginScreen','dashboardScreen'].forEach(screen => $(screen).classList.toggle('hidden',screen !== id));
       $('topLoginBtn').classList.toggle('hidden',id === 'dashboardScreen' || id === 'loginScreen');
@@ -310,94 +302,100 @@
       $('toast').textContent = message;
       $('toast').classList.add('visible');
       clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => $('toast').classList.remove('visible'), 1600);
+      toastTimer = setTimeout(() => $('toast').classList.remove('visible'), 2100);
     }
-    function defaultCounts() {return Object.fromEntries(ITEMS.map(item => [item.id,0]));}
-    function userPoints(user) {
-      return ITEMS.reduce((total,item) => total + Math.max(0,Number(user.counts?.[item.id])||0)*POINTS_PER_ITEM,0);
-    }
-    // Local-only password digest. This is NOT a security boundary; localStorage is editable.
-    // A real password system requires a server and trusted authentication.
-    function hex(buffer) {return Array.from(new Uint8Array(buffer)).map(x => x.toString(16).padStart(2,'0')).join('');}
-    function salt() {
-      const bytes = new Uint8Array(16);
-      crypto.getRandomValues(bytes);
-      return hex(bytes.buffer);
-    }
-    async function digest(password, userSalt) {
-      if (!crypto.subtle) throw new Error('Open this app using HTTPS (such as GitHub Pages).');
-      const data = new TextEncoder().encode(userSalt + ':' + password);
-      return hex(await crypto.subtle.digest('SHA-256',data));
+    function userPoints(player) {
+      return ITEMS.reduce((total,item) => total + Math.max(0,Number(player?.counts?.[item.id])||0)*POINTS_PER_ITEM,0);
     }
     async function createAccount(event) {
       event.preventDefault();
-      const name = normalizeUsername($('newUsername').value);
-      const password = $('newPassword').value;
       const notice = $('signupMessage');
       notice.textContent = '';
-      if(!chosenHouse){notice.textContent = 'Please choose a house first.';return;}
-      if(!/^[a-z0-9_-]{3,24}$/.test(name)){notice.textContent = 'Username must be 3–24 characters using letters, numbers, - or _.';return;}
-      if(password.length < 4){notice.textContent = 'Use at least four characters.';return;}
-      const users = getUsers();
-      if(users[name]){notice.textContent = 'This username already exists in this browser. Please log in.';return;}
+      if (!db) {notice.textContent = 'Connection not configured. Add your Supabase URL and publishable key to index.html.';return;}
+      if (!chosenHouse) {notice.textContent = 'Please choose a house first.';return;}
+      const email = $('newUsername').value.trim();
+      const password = $('newPassword').value;
+      if (password.length < 6) {notice.textContent = 'Choose a password of at least 6 characters.';return;}
+      const button = $('createForm').querySelector('[type=submit]'); button.disabled = true;
       try {
-        const userSalt = salt();
-        users[name] = {passwordSalt:userSalt, passwordHash:await digest(password,userSalt),house:chosenHouse,wizardName:proposedName,counts:defaultCounts(),createdAt:new Date().toISOString()};
-        saveUsers(users);
-        localStorage.setItem(STORAGE_SESSION,name);
+        const {data,error} = await db.auth.signUp({email,password,options:{data:{house:chosenHouse,wizard_name:proposedName}}});
+        if (error) throw error;
         $('newPassword').value = '';
-        openDashboard(name);
-      } catch (err) {notice.textContent = 'Could not save account: ' + (err.message || 'Check browser settings.');}
+        if (data.session && data.user) {
+          await openDashboard(data.user);
+        } else {
+          notice.textContent = 'Check your email for a confirmation link, then use Returning wizard? Log in.';
+        }
+      } catch (err) {notice.textContent = 'Could not create account: ' + (err.message || 'Try again.');}
+      finally {button.disabled = false;}
     }
     async function login(event) {
       event.preventDefault();
-      const name = normalizeUsername($('loginUsername').value);
-      const password = $('loginPassword').value;
-      const notice = $('loginMessage');
-      notice.textContent = '';
-      const user = getUsers()[name];
-      if(!user){notice.textContent = 'No matching account on this browser.';return;}
+      const notice = $('loginMessage'); notice.textContent = '';
+      if (!db) {notice.textContent = 'Connection not configured. Add your Supabase URL and publishable key to index.html.';return;}
+      const button = $('loginForm').querySelector('[type=submit]'); button.disabled = true;
       try {
-        if((await digest(password,user.passwordSalt)) !== user.passwordHash){notice.textContent = 'Incorrect password.';return;}
-        localStorage.setItem(STORAGE_SESSION,name);
-        $('loginPassword').value='';
-        openDashboard(name);
-      } catch(err) {notice.textContent = 'Could not log in: ' + (err.message || 'Try again.');}
+        const {data,error} = await db.auth.signInWithPassword({email:$('loginUsername').value.trim(),password:$('loginPassword').value});
+        if (error) throw error;
+        $('loginPassword').value = '';
+        await openDashboard(data.user);
+      } catch (err) {notice.textContent = 'Could not log in: ' + (err.message || 'Try again.');}
+      finally {button.disabled = false;}
     }
-    function logout() {
-      activeUsername = null;
-      localStorage.removeItem(STORAGE_SESSION);
-      $('loginPassword').value = '';
-      $('loginMessage').textContent = '';
-      applyHouse('Gryffindor');
-      showScreen('houseScreen');
+    async function logout() {
+      if (scoreSubscription && db) {await db.removeChannel(scoreSubscription);scoreSubscription=null;}
+      if (db) {await db.auth.signOut({scope:'local'});}
+      activeUser=null;activePlayer=null;allPlayers=[];
+      $('loginPassword').value=''; $('loginMessage').textContent='';
+      applyHouse('Gryffindor');showScreen('houseScreen');
     }
-    function openDashboard(name) {
-      const user = getUsers()[name];
-      if(!user || !HOUSES[user.house]){logout();return;}
-      activeUsername = name;
-      applyHouse(user.house);
-      $('playerCrest').textContent=HOUSES[user.house].icon;
-      $('playerHouse').textContent=`${user.house} · ${name}`;
-      $('playerName').textContent=user.wizardName;
-      renderCounters(user);
+    async function openDashboard(user) {
+      if(!user) {showScreen('houseScreen');return;}
+      activeUser=user;
+      await refreshPlayers();
+      if (!activePlayer || !HOUSES[activePlayer.house]) {
+        $('loginMessage').textContent='Player record not found. Confirm your email, then log in. If the problem continues, check setup.sql.';
+        showScreen('loginScreen'); return;
+      }
+      applyHouse(activePlayer.house);
+      $('playerCrest').textContent=HOUSES[activePlayer.house].icon;
+      $('playerHouse').textContent=activePlayer.house;
+      $('playerName').textContent=activePlayer.wizard_name;
+      renderCounters(activePlayer);
       renderScores();
       showScreen('dashboardScreen');
+      if (scoreSubscription && db) await db.removeChannel(scoreSubscription);
+      // Realtime fires when ANY player changes a counter or name.
+      scoreSubscription=db.channel('hogwarts-house-cup')
+        .on('postgres_changes',{event:'*',schema:'public',table:'players'},()=>{refreshPlayers().catch(console.error);})
+        .subscribe();
     }
-    function renderCounters(user) {
-      const grid=$('itemGrid');
-      grid.innerHTML='';
-      ITEMS.forEach(item => {
-        const count = Math.max(0,Number(user.counts?.[item.id])||0);
-        const card=document.createElement('article');
-        card.className='item-card';
-        const iconButton=document.createElement('button');
-        iconButton.type='button';iconButton.className='icon-button';
+    async function refreshPlayers() {
+      if (!db || !activeUser) return;
+      if (refreshInProgress) {needsRefresh = true;return;}
+      refreshInProgress = true;
+      try {
+        const {data,error} = await db.from('players').select('id,wizard_name,house,counts');
+        if (error) throw error;
+        allPlayers = data || [];
+        activePlayer=allPlayers.find(p=>p.id===activeUser.id) || null;
+        if (activePlayer) {renderCounters(activePlayer);renderScores();$('playerName').textContent=activePlayer.wizard_name;}
+      } catch(err) {console.error('Score update failed:',err);showToast('Could not refresh scores. Check your connection.');}
+      finally {
+        refreshInProgress = false;
+        if (needsRefresh) {needsRefresh=false;refreshPlayers().catch(console.error);}
+      }
+    }
+    function renderCounters(player) {
+      const grid=$('itemGrid'); grid.innerHTML='';
+      ITEMS.forEach(item=>{
+        const count=Math.max(0,Number(player?.counts?.[item.id])||0);
+        const card=document.createElement('article');card.className='item-card';
+        const iconButton=document.createElement('button');iconButton.type='button';iconButton.className='icon-button';
         iconButton.setAttribute('aria-label',`Add one ${item.label}`);
-        // If user hasn't uploaded image yet, show readable emoji placeholder.
         const img=document.createElement('img');img.src=item.image;img.alt='';img.loading='lazy';
         const placeholder=document.createElement('span');placeholder.className='icon-placeholder hidden';placeholder.textContent=item.emoji;placeholder.setAttribute('aria-hidden','true');
-        img.addEventListener('error',() => {
+        img.addEventListener('error',()=>{
           if(item.altImage && !img.dataset.triedAlt){img.dataset.triedAlt='yes';img.src=item.altImage;return;}
           img.remove();placeholder.classList.remove('hidden');
         });
@@ -409,59 +407,48 @@
         const undo=document.createElement('button');undo.type='button';undo.className='undo-btn';undo.textContent='− Undo one';undo.disabled=count<=0;undo.id=`undo-${item.id}`;
         undo.setAttribute('aria-label',`Remove one ${item.label}`);
         undo.addEventListener('click',()=>changeCount(item.id,-1));
-        card.append(iconButton,number,label,points,undo);
-        grid.append(card);
+        card.append(iconButton,number,label,points,undo);grid.append(card);
       });
     }
-    function changeCount(itemId,difference) {
-      const users=getUsers();
-      const user=users[activeUsername];
-      if(!user || !ITEMS.some(i => i.id===itemId))return;
-      if(!user.counts)user.counts=defaultCounts();
-      const previous=Math.max(0,Number(user.counts[itemId])||0);
-      const next=Math.max(0,previous+difference);
-      if(next===previous)return;
-      user.counts[itemId]=next;
-      try {saveUsers(users);} catch {showToast('Could not save. Check browser storage.');return;}
-      $(`count-${itemId}`).textContent=next;
-      $(`undo-${itemId}`).disabled=next===0;
-      renderScores();
-      if(difference>0) showToast('+10 points for ' + ITEMS.find(i=>i.id===itemId).label + '!');
-      else showToast('One entry removed · −10 points');
+    async function changeCount(itemId,difference) {
+      if(!db || !activeUser || !ITEMS.some(item=>item.id===itemId)) return;
+      try {
+        // Atomic, server-authorized increment. Other users' scores cannot be changed.
+        const {data,error}=await db.rpc('adjust_my_item',{p_item:itemId,p_delta:difference});
+        if(error) throw error;
+        if(activePlayer) activePlayer.counts=data;
+        await refreshPlayers();
+        if(difference>0) showToast('+10 points for '+ITEMS.find(item=>item.id===itemId).label+'!');
+        else showToast('One entry removed · −10 points');
+      } catch(err) {showToast(err.message || 'Could not save. Try again.');console.error(err);}
     }
     function renderScores() {
-      const users=getUsers();
       const totals=Object.fromEntries(Object.keys(HOUSES).map(h=>[h,0]));
-      Object.values(users).forEach(user=> {if(totals[user.house]!==undefined)totals[user.house]+=userPoints(user);});
-      const current=users[activeUsername];
-      $('totalPoints').textContent=current ? userPoints(current).toLocaleString() : '0';
+      allPlayers.forEach(player=>{if(totals[player.house]!==undefined)totals[player.house]+=userPoints(player);});
+      $('totalPoints').textContent=activePlayer?userPoints(activePlayer).toLocaleString():'0';
       const max=Math.max(100,...Object.values(totals));
       const area=$('hourglasses');area.innerHTML='';
       for(const house of Object.keys(HOUSES)){
-        const container=document.createElement('div');
-        container.className='house-column' + (current?.house===house?' is-current':'');
-        container.dataset.house=house;
+        const container=document.createElement('div');container.className='house-column'+(activePlayer?.house===house?' is-current':'');container.dataset.house=house;
         const top=document.createElement('div');top.className='vessel-top';
         const vessel=document.createElement('div');vessel.className='vessel';
-        const fill=document.createElement('div');fill.className='gem-fill';fill.style.height=`${Math.min(100,totals[house]/max*100)}%`;
-        vessel.append(fill);
+        const fill=document.createElement('div');fill.className='gem-fill';fill.style.height=`${Math.min(100,totals[house]/max*100)}%`;vessel.append(fill);
         const bottom=document.createElement('div');bottom.className='vessel-bottom';
         const name=document.createElement('span');name.className='house-column-name';name.textContent=house;
         const score=document.createElement('strong');score.className='house-score';score.textContent=totals[house].toLocaleString();
         container.append(top,vessel,bottom,name,score);area.append(container);
       }
     }
-    function rerollDashboard() {
-      if(!activeUsername)return;
-      const users=getUsers();
-      const user=users[activeUsername];
-      if(!user)return;
-      const oldName=user.wizardName;
-      let newName=oldName;
-      for(let i=0;i<7 && newName===oldName;i++)newName=`${randomFrom(FIRST_NAMES)} ${randomFrom(MIDDLE_NAMES)} ${randomFrom(SURNAMES)}`;
-      user.wizardName=newName;
-      try {saveUsers(users);$('playerName').textContent=newName;showToast('New wizard name saved!');}
-      catch {showToast('Could not save your name.');}
+    async function rerollDashboard() {
+      if(!db || !activeUser || !activePlayer)return;
+      const oldName=activePlayer.wizard_name;
+      let name=oldName;
+      for(let i=0;i<8 && name===oldName;i++)name=`${randomFrom(FIRST_NAMES)} ${randomFrom(MIDDLE_NAMES)} ${randomFrom(SURNAMES)}`;
+      try {
+        const {error}=await db.from('players').update({wizard_name:name}).eq('id',activeUser.id);
+        if(error) throw error;
+        activePlayer.wizard_name=name;$('playerName').textContent=name;showToast('New wizard name saved!');
+      } catch(err) {showToast('Could not save wizard name.');console.error(err);}
     }
     document.querySelectorAll('.house-choice').forEach(btn=>btn.addEventListener('click',()=>beginSignup(btn.dataset.house)));
     $('topLoginBtn').addEventListener('click',()=>{showScreen('loginScreen');$('loginMessage').textContent='';});
@@ -472,9 +459,19 @@
     $('loginForm').addEventListener('submit',login);
     $('logoutBtn').addEventListener('click',logout);
     $('rerollDashboard').addEventListener('click',rerollDashboard);
-    const savedSession=localStorage.getItem(STORAGE_SESSION);
-    if(savedSession && getUsers()[savedSession])openDashboard(savedSession);
-    else {localStorage.removeItem(STORAGE_SESSION);showScreen('houseScreen');}
+    async function startup() {
+      showScreen('houseScreen');
+      if (!db) {
+        $('houseScreen').querySelector('.fine').textContent='Supabase is not connected yet. Add your Project URL and publishable key to index.html and run setup.sql.';
+        return;
+      }
+      try {
+        const {data:{session},error}=await db.auth.getSession();
+        if(error) throw error;
+        if(session?.user) await openDashboard(session.user);
+      } catch(err) {console.error(err);showToast('Connection error. Please try again.');}
+    }
+    startup();
   </script>
 </body>
 </html>
