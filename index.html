@@ -96,6 +96,7 @@
     .section-head h2 {margin-bottom:4px}
     .item-grid {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
     .item-card {display:flex;flex-direction:column;align-items:center;min-width:0;padding:14px 12px 17px;border:1px solid #bda57735;border-radius:14px;background:linear-gradient(180deg,#26222aee,#17171dec);transition:transform .17s,border-color .17s,box-shadow .17s}
+    .trivia-card {border-color:#deb96c66;background:linear-gradient(180deg,#30281fee,#17171dec)}
     .item-card:hover {border-color:color-mix(in srgb,var(--house-light) 55%,#a99059);box-shadow:0 14px 30px #0004;transform:translateY(-3px)}
     .icon-button {position:relative;display:grid;place-items:center;width:100%;aspect-ratio:1/1;background:radial-gradient(ellipse at center,#ad7d4330,transparent 70%);border:0;padding:0;border-radius:15px;transition:transform .12s}
     .icon-button:active {transform:scale(.94)}
@@ -136,6 +137,53 @@
     @media(max-width:800px){.house-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-width:590px;margin-inline:auto}.item-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.intro{margin-top:30px}.topline{margin-bottom:25px}}
     @media(max-width:540px){:root{--content:calc(100% - 22px)}.shell{padding-top:15px}.brand-text{font-size:10px}.topline{margin-bottom:25px}.intro{margin-top:22px}.house-grid{gap:9px}.house-choice{min-height:190px;gap:7px;padding:10px 4px}.house-icon{font-size:48px;width:79px;height:79px}.house-choice strong{font-size:17px}.house-choice span:last-child{font-size:9px;letter-spacing:.08em}.setup,.login-panel{padding:23px 18px}.field-grid{grid-template-columns:1fr;gap:13px}.dashboard-top{align-items:flex-start;gap:8px}.profile-line{gap:10px}.profile-crest{flex-basis:53px;width:53px;height:53px;font-size:31px}.dashboard-top .quiet-btn{padding:9px 11px}.hero{padding:29px 12px}.item-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.item-card{padding:10px 8px 13px}.item-label{font-size:16px}.item-points{font-size:9px}.hourglasses{gap:5px;min-height:245px}.vessel{width:49px;height:189px;border-width:5px}.vessel-top,.vessel-bottom{width:58px}.house-column{gap:7px}.house-column-name{font-size:10px}.house-score{font-size:14px}.scorecard{padding:24px 6px 20px}.section-head{display:block}.section-head p{margin-top:4px}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+
+    /* Explore, film rankings and downloadable marathon summary */
+    .quick-tools {display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:-12px 0 39px}
+    .feature-btn {display:inline-flex;justify-content:center;align-items:center;gap:10px;min-width:190px;border:1px solid #d6af6a70;border-radius:12px;color:#f8e3bb;background:linear-gradient(145deg,#312923,#17171c);padding:15px 20px;font:700 13px system-ui,sans-serif;transition:border-color .2s,transform .2s}
+    .feature-btn:hover {border-color:#f3d392;transform:translateY(-2px)}
+    .feature-btn .symbol {font-size:20px}
+    .rank-section {padding:30px;margin:49px 0 40px;scroll-margin-top:25px}
+    .rank-description {font-size:13px;margin-bottom:20px}
+    .rank-list {list-style:none;padding:0;margin:0;display:grid;gap:9px}
+    .rank-row {display:flex;align-items:center;gap:13px;padding:12px;border:1px solid #aa90603e;border-radius:12px;background:#0b0c14bb;transition:border-color .12s,opacity .12s,background .12s}
+    .rank-row[draggable=true] {cursor:grab}
+    .rank-row.dragging {opacity:.45}
+    .rank-row.drag-target {border-color:var(--gold);background:#8e663125}
+    .rank-number {display:grid;place-items:center;flex:0 0 40px;width:40px;height:40px;border-radius:9px;color:#f5d390;border:1px solid #c2a36c66;background:#5d421e38;font:800 19px/1 system-ui,sans-serif}
+    .rank-movie {flex:1;min-width:0;font-size:clamp(14px,1.7vw,18px);line-height:1.35;color:#f8e9d1}
+    .rank-controls {display:flex;gap:6px;flex-shrink:0}
+    .rank-arrow {width:36px;height:36px;border:1px solid #c9af7850;border-radius:8px;background:#ffffff0a;color:var(--gold);font:700 20px/1 system-ui,sans-serif}
+    .rank-arrow:hover:not(:disabled) {background:#e8bd7140}
+    .rank-actions {display:flex;align-items:center;gap:17px;flex-wrap:wrap;margin-top:18px}
+    .rank-status {font:12px/1.5 system-ui,sans-serif;color:#bdb19c}
+    .finish-section {margin-top:38px;padding:29px;text-align:center;border:1px solid #b99a614c;border-radius:19px;background:radial-gradient(circle at 50% -20%,var(--house-soft),transparent 65%),#19171c}
+    .finish-section h2 {margin-top:7px}
+    .finish-section p {max-width:560px;margin:0 auto 21px;font-size:13px}
+    .overlay {position:fixed;inset:0;z-index:100;background:rgba(2,3,9,.88);display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(7px)}
+    body.modal-open {overflow:hidden}
+    .modal-window {display:flex;flex-direction:column;width:min(1050px,100%);max-height:calc(100dvh - 32px);overflow:hidden;border:1px solid #d3ae6b80;border-radius:18px;background:linear-gradient(155deg,#27232b,#101015);box-shadow:0 24px 100px #000c}
+    .modal-bar {display:flex;justify-content:space-between;align-items:center;gap:15px;padding:19px 22px;border-bottom:1px solid #d3ae6b37}
+    .modal-bar h2 {margin:0;font-size:clamp(23px,4vw,32px)}
+    .modal-close {flex-shrink:0;border:1px solid #c8a87683;background:#ffffff0c;border-radius:9px;color:var(--paper);padding:9px 14px;font:700 13px system-ui,sans-serif}
+    .modal-scroll {overflow-y:auto;min-height:0;padding:23px}
+    .map-options {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .map-option {display:flex;flex-direction:column;gap:12px;overflow:hidden;text-align:left;color:var(--paper);border:1px solid #c5a77269;border-radius:13px;padding:12px;background:#0f1019}
+    .map-option:hover {border-color:var(--gold)}
+    .map-option img {display:block;width:100%;height:220px;object-fit:cover;object-position:center;border-radius:8px;filter:sepia(.23)}
+    .map-option strong {font-size:23px;font-weight:500;padding:0 5px}
+    .map-option span {font:12px system-ui,sans-serif;color:var(--muted);padding:0 5px 9px}
+    .map-view-actions {display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+    .map-image-scroll {overflow:auto;max-height:calc(100dvh - 255px);border:1px solid #b49c6b60;border-radius:12px;background:#211c1a;touch-action:pan-x pan-y}
+    .map-image-scroll img {display:block;width:100%;height:auto;max-width:none}
+    .map-image-scroll img.is-zoomed {width:1500px;max-width:none}
+    .map-link {color:var(--gold);font:600 12px system-ui,sans-serif;text-decoration:underline;text-underline-offset:3px}
+    .map-hint {font:12px system-ui,sans-serif;color:#b0a89d;margin-top:9px}
+    .summary-window {max-width:720px}
+    .summary-preview {width:min(460px,100%);display:block;margin:0 auto 20px;border:1px solid #dfba7580;border-radius:9px;box-shadow:0 20px 40px #0008}
+    .summary-actions {display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+    .summary-note {font:12px/1.5 system-ui,sans-serif;text-align:center;color:#c1b5a3}
+    @media(max-width:600px){.rank-section{padding:21px 13px}.rank-row{gap:7px;padding:9px 7px}.rank-number{flex-basis:32px;width:32px;height:34px;font-size:15px}.rank-arrow{width:32px;height:33px}.rank-movie{font-size:13px}.rank-controls{gap:4px}.modal-scroll{padding:14px}.map-options{grid-template-columns:1fr}.map-option img{height:170px}.modal-bar{padding:14px}.quick-tools{margin-top:-10px}.feature-btn{min-width:140px;flex:1;padding:13px 9px;font-size:12px}.finish-section{padding:22px 12px}}
   </style>
 </head>
 <body>
@@ -216,14 +264,28 @@
         <span class="medallion" aria-hidden="true">✦</span>
         <div class="eyebrow">The Great Hall · Movie Marathon</div>
         <h1>The House Cup</h1>
-        <p>Every indulgence is worth 10 house points. Tap an icon to add one.</p>
+        <p>Collect points for every item and trivia victory. Tap an icon to add one.</p>
       </section>
+      <nav class="quick-tools" aria-label="Marathon tools">
+        <button type="button" id="showMapsBtn" class="feature-btn"><span class="symbol" aria-hidden="true">🗺️</span> Show Map</button>
+        <button type="button" id="jumpRankingsBtn" class="feature-btn"><span class="symbol" aria-hidden="true">🎬</span> Rank the Movies</button>
+      </nav>
       <section aria-labelledby="counterTitle">
         <div class="section-head">
           <div><div class="eyebrow">Your magical inventory</div><h2 id="counterTitle">The Counters</h2></div>
           <p>Tap the artwork to add +1 · Use Undo to correct a tap</p>
         </div>
         <div id="itemGrid" class="item-grid"></div>
+      </section>
+      <section id="movieRankingSection" class="panel rank-section" aria-labelledby="movieRankingTitle">
+        <div class="eyebrow">The eight films</div>
+        <h2 id="movieRankingTitle">Your Movie Rankings</h2>
+        <p class="rank-description">Arrange the films from #1 (favorite) to #8. Drag on a computer, or use the arrow buttons on your phone. Your order saves to your own Supabase account.</p>
+        <ol id="rankList" class="rank-list" aria-label="Your films ranked favorite to least favorite"></ol>
+        <div class="rank-actions">
+          <button id="saveRankingBtn" class="main-btn" type="button">Save My Rankings</button>
+          <span id="rankStatus" class="rank-status" role="status" aria-live="polite">Loading your rankings...</span>
+        </div>
       </section>
       <section class="score-section" aria-labelledby="scoreTitle">
         <div class="scorecard">
@@ -234,10 +296,48 @@
           <div class="personal-total"><strong id="totalPoints">0</strong><span>Your personal<br>house points</span></div>
         </div>
       </section>
+      <section class="finish-section" aria-labelledby="finishTitle">
+        <div class="eyebrow">Your magical memories</div>
+        <h2 id="finishTitle">The End of the Marathon</h2>
+        <p>Create a personalized keepsake showing your counters, trivia victories, total points, and eight-film ranking. This doesn't lock or reset the game.</p>
+        <button id="openSummaryBtn" type="button" class="main-btn">✦ Finish Marathon · View My Summary</button>
+      </section>
       <footer class="footer">Your wizard name, house, and counters save to your Supabase account.<br>House points synchronize across players, even on different devices.<br>Unofficial fan-made marathon tracker.</footer>
     </main>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- Both user-provided maps are included locally in the GitHub repository. -->
+  <div id="mapModal" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="mapModalTitle">
+    <div class="modal-window">
+      <div class="modal-bar"><h2 id="mapModalTitle">Explore the Castle</h2><button type="button" id="closeMapBtn" class="modal-close" aria-label="Close maps">✕ Close</button></div>
+      <div class="modal-scroll">
+        <div id="mapChoices" class="map-options">
+          <button type="button" class="map-option" data-map="grounds"><img src="map-grounds.jpg" alt="Preview of Hogwarts grounds map"><strong>Outside the Castle</strong><span>The grounds, lake, forest, Hogsmeade and nearby locations</span></button>
+          <button type="button" class="map-option" data-map="castle"><img src="map-castle.jpg" alt="Preview of castle interior map"><strong>Inside the Castle</strong><span>A parchment-style map of corridors, towers and castle rooms</span></button>
+        </div>
+        <div id="mapView" class="hidden">
+          <div class="map-view-actions">
+            <button type="button" id="mapBackBtn" class="quiet-btn">← Both maps</button>
+            <button type="button" id="mapZoomBtn" class="quiet-btn">Zoom in</button>
+            <a id="mapFullLink" class="map-link" href="map-grounds.jpg" target="_blank" rel="noopener">Open full-size image ↗</a>
+          </div>
+          <div class="map-image-scroll" id="mapScroll"><img id="mapViewerImg" src="map-grounds.jpg" alt="Map of Hogwarts grounds"></div>
+          <p class="map-hint">Use Zoom in to inspect small details, then scroll to pan around the map.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="summaryModal" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="summaryTitle">
+    <div class="modal-window summary-window">
+      <div class="modal-bar"><h2 id="summaryTitle">Your Marathon Keepsake</h2><button type="button" id="closeSummaryBtn" class="modal-close" aria-label="Close summary">✕ Close</button></div>
+      <div class="modal-scroll">
+        <img id="summaryPreview" class="summary-preview" alt="Your personal Harry Potter marathon summary image">
+        <div class="summary-actions"><button id="saveSummaryBtn" type="button" class="main-btn">↓ Save Summary as PNG</button></div>
+        <p id="summaryMessage" class="summary-note" role="status">This image is generated from your own saved marathon results.</p>
+      </div>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -256,22 +356,46 @@
       Ravenclaw:{icon:'🦅', color:'#265ca0',light:'#d0a878',soft:'rgba(38,92,160,.24)'},
       Hufflepuff:{icon:'🦡', color:'#b58a1e',light:'#f3d479',soft:'rgba(181,138,30,.23)'}
     };
+    // To add custom names, edit NAME_POOL below. Both first and middle names
+    // are drawn independently from this ONE list (without duplicates in a name).
     const ITEMS = [
-      {id:'butterbeer', label:'Butterbeer', image:'butterbeer.png', emoji:'🍺'},
-      {id:'polyjuice', label:'Polyjuice Potion', image:'polyjuice.png', altImage:'polyjuicepotion.png', emoji:'🧪'},
-      {id:'liquidluck', label:'Felix Felicis', image:'liquidluck.png', altImage:'felixfelicis.png', emoji:'✨'},
-      {id:'brandy', label:'Brandy', image:'brandy.png', emoji:'🥃'},
-      {id:'beer', label:'Beer', image:'beer.png', emoji:'🍻'},
-      {id:'gillyweed', label:'Gillyweed', image:'gillyweed.png', emoji:'🌿'},
-      {id:'mushroom', label:'Mushroom', image:'mushroom.png', emoji:'🍄'}
+      {id:'butterbeer', label:'Butterbeer', image:'butterbeer.png', emoji:'🍺', points:10},
+      {id:'polyjuice', label:'Polyjuice Potion', image:'polyjuice.png', altImage:'polyjuicepotion.png', emoji:'🧪', points:10},
+      {id:'liquidluck', label:'Felix Felicis', image:'liquidluck.png', altImage:'felixfelicis.png', emoji:'✨', points:10},
+      {id:'brandy', label:'Brandy', image:'brandy.png', emoji:'🥃', points:10},
+      {id:'beer', label:'Beer', image:'beer.png', emoji:'🍻', points:10},
+      {id:'gillyweed', label:'Gillyweed', image:'gillyweed.png', emoji:'🌿', points:3},
+      {id:'mushroom', label:'Mushroom', image:'mushroom.png', emoji:'🍄', points:10},
+      {id:'triviawinner', label:'Trivia Winner', image:'triviawinner.png', emoji:'🏆', points:100}
     ];
-    const POINTS_PER_ITEM = 10;
-    const FIRST_NAMES = ['Alaric','Luna','Cedric','Elowen','Rowan','Gideon','Mira','Aurelia','Felix','Cassian','Theodore','Willow','Orion','Isolde','Marlowe','Nimue','Jasper','Lyra','Merlin','Edric','Astrid','Ophelia','Silas','Elara','Briar','Lucien','Dorian','Selene'];
-    const MIDDLE_NAMES = ['Finn','Moon','Everhart','Wren','Storm','Thistle','Ash','Sage','Bramble','Fable','Frost','Hollow','Quill','Briar','Dusk','Rune','Flint','Starling','Rowan','Hawthorne','Silver','Ember','Vale','Basil','Fox','Wolfe','Mist'];
+    const NAME_POOL = [
+      'Alaric', 'Luna', 'Cedric', 'Elowen', 'Rowan', 'Gideon', 'Mira', 'Aurelia',
+      'Felix', 'Cassian', 'Theodore', 'Willow', 'Orion', 'Isolde', 'Marlowe', 'Nimue',
+      'Jasper', 'Lyra', 'Merlin', 'Edric', 'Astrid', 'Ophelia', 'Silas', 'Elara',
+      'Briar', 'Lucien', 'Dorian', 'Selene', 'Finn', 'Moon', 'Everhart', 'Wren',
+      'Storm', 'Thistle', 'Ash', 'Sage', 'Bramble', 'Fable', 'Frost', 'Hollow',
+      'Quill', 'Dusk', 'Rune', 'Flint', 'Starling', 'Hawthorne', 'Silver', 'Ember',
+      'Vale', 'Basil', 'Fox', 'Wolfe', 'Mist'
+    ];
+    // The order is saved individually per user in public.movie_rankings.
+    const MOVIES = [
+      {id:'stone',title:"Harry Potter and the Sorcerer's Stone",short:"Sorcerer's Stone"},
+      {id:'chamber',title:'Harry Potter and the Chamber of Secrets',short:'Chamber of Secrets'},
+      {id:'azkaban',title:'Harry Potter and the Prisoner of Azkaban',short:'Prisoner of Azkaban'},
+      {id:'goblet',title:'Harry Potter and the Goblet of Fire',short:'Goblet of Fire'},
+      {id:'phoenix',title:'Harry Potter and the Order of the Phoenix',short:'Order of the Phoenix'},
+      {id:'prince',title:'Harry Potter and the Half-Blood Prince',short:'Half-Blood Prince'},
+      {id:'hallows1',title:'Harry Potter and the Deathly Hallows – Part 1',short:'Deathly Hallows – Part 1'},
+      {id:'hallows2',title:'Harry Potter and the Deathly Hallows – Part 2',short:'Deathly Hallows – Part 2'}
+    ];
     const SURNAMES = ['Potter','Weasley','Granger','Malfoy','Snape'];
     const $ = id => document.getElementById(id);
     let chosenHouse = null, proposedName = '', activeUser = null, activePlayer = null;
     let allPlayers = [], toastTimer, scoreSubscription = null, refreshInProgress = false, needsRefresh = false;
+    let rankOrder = MOVIES.map(movie => movie.id), rankSaved = false, rankDirty = false;
+    let rankingTimer = null, rankingChain = Promise.resolve(), dragId = null;
+    let summaryCanvas = null, lastFocusedElement = null;
+
 
     function showScreen(id) {
       ['houseScreen','setupScreen','loginScreen','dashboardScreen'].forEach(screen => $(screen).classList.toggle('hidden',screen !== id));
@@ -285,8 +409,14 @@
       document.documentElement.style.setProperty('--house-soft',h.soft);
     }
     function randomFrom(list) {return list[Math.floor(Math.random()*list.length)];}
+    function generateFullName() {
+      const first = randomFrom(NAME_POOL);
+      const remainingNames = NAME_POOL.filter(name => name !== first);
+      const middle = randomFrom(remainingNames.length ? remainingNames : NAME_POOL);
+      return `${first} ${middle} ${randomFrom(SURNAMES)}`;
+    }
     function newWizardName() {
-      proposedName = `${randomFrom(FIRST_NAMES)} ${randomFrom(MIDDLE_NAMES)} ${randomFrom(SURNAMES)}`;
+      proposedName = generateFullName();
       $('generatedName').textContent = proposedName;
     }
     function beginSignup(house) {
@@ -305,7 +435,7 @@
       toastTimer = setTimeout(() => $('toast').classList.remove('visible'), 2100);
     }
     function userPoints(player) {
-      return ITEMS.reduce((total,item) => total + Math.max(0,Number(player?.counts?.[item.id])||0)*POINTS_PER_ITEM,0);
+      return ITEMS.reduce((total,item) => total + Math.max(0,Number(player?.counts?.[item.id])||0)*item.points,0);
     }
     async function createAccount(event) {
       event.preventDefault();
@@ -345,6 +475,9 @@
     async function logout() {
       if (scoreSubscription && db) {await db.removeChannel(scoreSubscription);scoreSubscription=null;}
       if (db) {await db.auth.signOut({scope:'local'});}
+      clearTimeout(rankingTimer);
+      rankOrder = MOVIES.map(movie=>movie.id);rankSaved=false;rankDirty=false;
+      closeModals();
       activeUser=null;activePlayer=null;allPlayers=[];
       $('loginPassword').value=''; $('loginMessage').textContent='';
       applyHouse('Gryffindor');showScreen('houseScreen');
@@ -364,6 +497,7 @@
       renderCounters(activePlayer);
       renderScores();
       showScreen('dashboardScreen');
+      await loadMovieRankings();
       if (scoreSubscription && db) await db.removeChannel(scoreSubscription);
       // Realtime fires when ANY player changes a counter or name.
       scoreSubscription=db.channel('hogwarts-house-cup')
@@ -391,6 +525,7 @@
       ITEMS.forEach(item=>{
         const count=Math.max(0,Number(player?.counts?.[item.id])||0);
         const card=document.createElement('article');card.className='item-card';
+        if(item.id==='triviawinner')card.classList.add('trivia-card');
         const iconButton=document.createElement('button');iconButton.type='button';iconButton.className='icon-button';
         iconButton.setAttribute('aria-label',`Add one ${item.label}`);
         const img=document.createElement('img');img.src=item.image;img.alt='';img.loading='lazy';
@@ -403,7 +538,7 @@
         iconButton.addEventListener('click',()=>changeCount(item.id,1));
         const number=document.createElement('div');number.className='count-number';number.id=`count-${item.id}`;number.textContent=count;
         const label=document.createElement('div');label.className='item-label';label.textContent=item.label;
-        const points=document.createElement('div');points.className='item-points';points.textContent='+10 points each';
+        const points=document.createElement('div');points.className='item-points';points.textContent=`+${item.points} ${item.points === 1 ? 'point' : 'points'} each`;
         const undo=document.createElement('button');undo.type='button';undo.className='undo-btn';undo.textContent='− Undo one';undo.disabled=count<=0;undo.id=`undo-${item.id}`;
         undo.setAttribute('aria-label',`Remove one ${item.label}`);
         undo.addEventListener('click',()=>changeCount(item.id,-1));
@@ -418,8 +553,9 @@
         if(error) throw error;
         if(activePlayer) activePlayer.counts=data;
         await refreshPlayers();
-        if(difference>0) showToast('+10 points for '+ITEMS.find(item=>item.id===itemId).label+'!');
-        else showToast('One entry removed · −10 points');
+        const item=ITEMS.find(entry=>entry.id===itemId);
+        if(difference>0) showToast('+'+item.points+' points for '+item.label+'!');
+        else showToast('One entry removed · −'+item.points+' points');
       } catch(err) {showToast(err.message || 'Could not save. Try again.');console.error(err);}
     }
     function renderScores() {
@@ -443,7 +579,7 @@
       if(!db || !activeUser || !activePlayer)return;
       const oldName=activePlayer.wizard_name;
       let name=oldName;
-      for(let i=0;i<8 && name===oldName;i++)name=`${randomFrom(FIRST_NAMES)} ${randomFrom(MIDDLE_NAMES)} ${randomFrom(SURNAMES)}`;
+      for(let i=0;i<8 && name===oldName;i++)name=generateFullName();
       try {
         const {error}=await db.from('players').update({wizard_name:name}).eq('id',activeUser.id);
         if(error) throw error;
@@ -459,6 +595,263 @@
     $('loginForm').addEventListener('submit',login);
     $('logoutBtn').addEventListener('click',logout);
     $('rerollDashboard').addEventListener('click',rerollDashboard);
+
+    // ────────────── Castle and grounds map viewer ──────────────
+    const MAPS = {
+      grounds:{src:'map-grounds.jpg',title:'Outside the Castle',alt:'Map of Hogwarts grounds, the Forbidden Forest, the lake and Hogsmeade'},
+      castle:{src:'map-castle.jpg',title:'Inside the Castle',alt:'Parchment-style map showing Hogwarts rooms, towers and corridors'}
+    };
+    function openModal(id) {
+      lastFocusedElement = document.activeElement;
+      $(id).classList.remove('hidden');
+      document.body.classList.add('modal-open');
+      $(id).querySelector('.modal-close')?.focus();
+    }
+    function closeModals() {
+      ['mapModal','summaryModal'].forEach(id=>$(id).classList.add('hidden'));
+      document.body.classList.remove('modal-open');
+      lastFocusedElement?.focus?.();
+    }
+    function openMaps() {
+      $('mapView').classList.add('hidden');
+      $('mapChoices').classList.remove('hidden');
+      $('mapModalTitle').textContent='Explore the Castle';
+      openModal('mapModal');
+    }
+    function chooseMap(id) {
+      const map=MAPS[id];if(!map)return;
+      $('mapChoices').classList.add('hidden');$('mapView').classList.remove('hidden');
+      $('mapModalTitle').textContent=map.title;
+      $('mapViewerImg').src=map.src;$('mapViewerImg').alt=map.alt;
+      $('mapViewerImg').classList.remove('is-zoomed');
+      $('mapZoomBtn').textContent='Zoom in';
+      $('mapFullLink').href=map.src;
+      $('mapScroll').scrollTop=0;$('mapScroll').scrollLeft=0;
+    }
+    $('showMapsBtn').addEventListener('click',openMaps);
+    $('closeMapBtn').addEventListener('click',closeModals);
+    $('mapBackBtn').addEventListener('click',()=>{
+      $('mapView').classList.add('hidden');$('mapChoices').classList.remove('hidden');
+      $('mapModalTitle').textContent='Explore the Castle';
+    });
+    document.querySelectorAll('.map-option').forEach(button=>button.addEventListener('click',()=>chooseMap(button.dataset.map)));
+    $('mapZoomBtn').addEventListener('click',()=>{
+      const zoomed=$('mapViewerImg').classList.toggle('is-zoomed');
+      $('mapZoomBtn').textContent=zoomed?'Zoom out':'Zoom in';
+    });
+    $('jumpRankingsBtn').addEventListener('click',()=>$('movieRankingSection').scrollIntoView({behavior:'smooth',block:'start'}));
+
+    // ────────────── Each player's private eight-film ranking ──────────────
+    function isValidRanking(order) {
+      return Array.isArray(order) && order.length===MOVIES.length &&
+        new Set(order).size===MOVIES.length &&
+        MOVIES.every(movie=>order.includes(movie.id));
+    }
+    function setRankStatus(message) {$('rankStatus').textContent=message;}
+    async function loadMovieRankings() {
+      clearTimeout(rankingTimer);
+      rankOrder=MOVIES.map(movie=>movie.id);rankSaved=false;rankDirty=false;
+      renderMovieRankings();setRankStatus('Loading your saved order...');
+      if(!db || !activeUser)return;
+      const uid=activeUser.id;
+      try {
+        const {data,error}=await db.from('movie_rankings').select('ranking').eq('user_id',uid).maybeSingle();
+        if(error) throw error;
+        if(activeUser?.id!==uid) return;
+        if(data && isValidRanking(data.ranking)) {
+          rankOrder=data.ranking;rankSaved=true;
+          setRankStatus('✓ Your rankings are saved and will be here next time.');
+        } else {
+          setRankStatus('Release order shown as a starting point. Move films or click Save My Rankings to save it.');
+        }
+        renderMovieRankings();
+      } catch(err) {
+        setRankStatus('Ranking storage is not ready. Run upgrade_all.sql in Supabase.');
+        console.error('Loading rankings failed:',err);
+      }
+    }
+    function renderMovieRankings() {
+      const list=$('rankList');list.innerHTML='';
+      rankOrder.forEach((id,index)=>{
+        const movie=MOVIES.find(entry=>entry.id===id);if(!movie)return;
+        const li=document.createElement('li');li.className='rank-row';li.draggable=true;li.dataset.movie=id;
+        const rank=document.createElement('span');rank.className='rank-number';rank.textContent=index+1;
+        const title=document.createElement('span');title.className='rank-movie';title.textContent=movie.title;
+        const controls=document.createElement('span');controls.className='rank-controls';
+        for(const [symbol,shift,word] of [['↑',-1,'up'],['↓',1,'down']]) {
+          const arrow=document.createElement('button');arrow.type='button';arrow.className='rank-arrow';
+          arrow.textContent=symbol;arrow.disabled=(index+shift<0 || index+shift>=rankOrder.length);
+          arrow.setAttribute('aria-label',`Move ${movie.title} ${word}`);
+          arrow.addEventListener('click',()=>moveMovie(id,index+shift));controls.append(arrow);
+        }
+        li.append(rank,title,controls);
+        li.addEventListener('dragstart',event=>{
+          dragId=id;li.classList.add('dragging');event.dataTransfer.effectAllowed='move';
+          event.dataTransfer.setData('text/plain',id);
+        });
+        li.addEventListener('dragover',event=>{event.preventDefault();li.classList.add('drag-target');});
+        li.addEventListener('dragleave',()=>li.classList.remove('drag-target'));
+        li.addEventListener('drop',event=>{
+          event.preventDefault();li.classList.remove('drag-target');
+          const fromId=dragId || event.dataTransfer.getData('text/plain');
+          if(fromId && fromId!==id)moveMovie(fromId,rankOrder.indexOf(id));
+          dragId=null;
+        });
+        li.addEventListener('dragend',()=>{dragId=null;document.querySelectorAll('.rank-row').forEach(row=>row.classList.remove('dragging','drag-target'));});
+        list.append(li);
+      });
+    }
+    function moveMovie(id,toIndex) {
+      const from=rankOrder.indexOf(id);
+      if(from<0||toIndex<0||toIndex>=rankOrder.length||from===toIndex)return;
+      rankOrder.splice(from,1);
+      rankOrder.splice(toIndex,0,id);
+      rankDirty=true;
+      renderMovieRankings();
+      setRankStatus('Saving your changes...');
+      clearTimeout(rankingTimer);
+      rankingTimer=setTimeout(()=>{persistRankings().catch(console.error);},420);
+    }
+    function persistRankings() {
+      clearTimeout(rankingTimer);
+      if(!db || !activeUser)return Promise.reject(new Error('Please log in first'));
+      const uid=activeUser.id;
+      const order=[...rankOrder];
+      setRankStatus('Saving your rankings...');
+      // Serial queue ensures rapid reorders never overwrite a newer ranking with an older one.
+      const operation=rankingChain.catch(()=>{}).then(async()=>{
+        const {error}=await db.from('movie_rankings').upsert({user_id:uid,ranking:order},{onConflict:'user_id'});
+        if(error)throw error;
+        if(activeUser?.id===uid && JSON.stringify(order)===JSON.stringify(rankOrder)) {
+          rankSaved=true;rankDirty=false;
+          setRankStatus('✓ Saved to your account.');
+        }
+      });
+      rankingChain=operation;
+      return operation.catch(err=>{
+        if(activeUser?.id===uid) {
+          rankDirty=true;setRankStatus('Not saved — '+(err.message||'check Supabase and try again.'));
+        }
+        throw err;
+      });
+    }
+    $('saveRankingBtn').addEventListener('click',async()=>{
+      try {await persistRankings();showToast('Movie rankings saved!');}
+      catch(err) {showToast('Could not save rankings. Check Supabase update.');}
+    });
+
+    // ────────────── Personalized, locally rendered PNG keepsake ──────────────
+    function roundBox(ctx,x,y,w,h,r) {
+      const q=Math.min(r,w/2,h/2);
+      ctx.beginPath();ctx.moveTo(x+q,y);ctx.lineTo(x+w-q,y);ctx.quadraticCurveTo(x+w,y,x+w,y+q);
+      ctx.lineTo(x+w,y+h-q);ctx.quadraticCurveTo(x+w,y+h,x+w-q,y+h);
+      ctx.lineTo(x+q,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-q);
+      ctx.lineTo(x,y+q);ctx.quadraticCurveTo(x,y,x+q,y);ctx.closePath();
+    }
+    function fittedText(ctx,text,maxWidth,baseSize,minSize=28) {
+      let size=baseSize;
+      do {ctx.font=`600 ${size}px Georgia, serif`;if(ctx.measureText(text).width<=maxWidth)break;size-=2;} while(size>minSize);
+      return size;
+    }
+    function makeSummaryCanvas(player,ranking) {
+      const W=1200,H=1920;
+      const canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;
+      const c=canvas.getContext('2d');
+      const house=HOUSES[player.house]||HOUSES.Gryffindor;
+      const bg=c.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#11121b');bg.addColorStop(.58,'#1d1920');bg.addColorStop(1,'#090a12');c.fillStyle=bg;c.fillRect(0,0,W,H);
+      const glow=c.createRadialGradient(W*.52,140,30,W*.52,240,750);
+      glow.addColorStop(0,house.color+'88');glow.addColorStop(1,'#10101900');c.fillStyle=glow;c.fillRect(0,0,W,1050);
+      for(let i=0;i<110;i++){
+        const x=(i*419+73)%W,y=(i*283+49)%H;
+        c.fillStyle=(i%4===0)?'#e3be747e':'#e8d5ad3c';
+        c.beginPath();c.arc(x,y,(i%7===0)?2.2:1.1,0,Math.PI*2);c.fill();
+      }
+      c.strokeStyle='#caa567';c.lineWidth=4;c.strokeRect(33,33,W-66,H-66);
+      c.strokeStyle='#ac8d5273';c.lineWidth=1;c.strokeRect(45,45,W-90,H-90);
+      c.textAlign='center';
+      c.fillStyle='#d3aa6a';c.font='700 28px Arial, sans-serif';c.fillText('✦   THE WIZARDING MARATHON   ✦',W/2,122);
+      c.fillStyle='#ffe1a6';c.font='500 70px Georgia, serif';c.fillText('My Marathon Chronicle',W/2,208);
+      const personalName=player.wizard_name||'Unknown Wizard';
+      fittedText(c,personalName,1020,54,31);c.fillStyle='#fff1d7';c.fillText(personalName,W/2,292);
+      c.font='700 26px Arial, sans-serif';c.fillStyle='#e0ba7f';c.fillText(`${player.house||'Hogwarts'}  •  YOUR PERSONAL RESULTS`,W/2,342);
+      function panel(x,y,w,h) {roundBox(c,x,y,w,h,19);c.fillStyle='#111018df';c.fill();c.strokeStyle='#ba96596d';c.lineWidth=2;c.stroke();}
+      panel(80,382,1040,147);
+      c.textAlign='center';c.fillStyle='#dbb878';c.font='700 26px Arial, sans-serif';c.fillText('POINTS EARNED',W/2,432);
+      c.font='700 75px Georgia, serif';c.fillStyle='#ffe3a7';c.fillText(userPoints(player).toLocaleString(),W/2,510);
+      panel(80,563,1040,481);
+      c.textAlign='left';c.fillStyle='#f4d69e';c.font='500 38px Georgia, serif';c.fillText('What I Consumed',122,621);
+      const consumables=ITEMS.filter(item=>item.id!=='triviawinner');
+      const totalConsumed=consumables.reduce((sum,item)=>sum+(Number(player.counts?.[item.id])||0),0);
+      c.textAlign='right';c.fillStyle='#bfb09c';c.font='20px Arial, sans-serif';c.fillText(`${totalConsumed} total`,1075,619);
+      c.textAlign='left';
+      consumables.forEach((item,i)=>{
+        const y=680+i*47;
+        c.fillStyle=i%2===0?'#ddd0b5':'#bdb5a5';c.font='25px Arial, sans-serif';c.fillText(item.label,127,y);
+        c.textAlign='right';c.fillStyle='#f6d499';c.font='700 28px Arial, sans-serif';
+        c.fillText(`× ${Math.max(0,Number(player.counts?.[item.id])||0)}`,1066,y);
+        c.textAlign='left';
+      });
+      panel(80,1076,1040,147);
+      c.fillStyle='#e1bb77';c.font='700 28px Arial, sans-serif';c.fillText('TRIVIA VICTORIES',125,1130);
+      const trivia=Math.max(0,Number(player.counts?.triviawinner)||0);
+      c.fillStyle='#ffe0a6';c.font='700 65px Georgia, serif';c.fillText(trivia.toLocaleString(),125,1201);
+      c.textAlign='right';c.fillStyle='#e5c890';c.font='600 26px Arial, sans-serif';c.fillText(`${(trivia*100).toLocaleString()} points from trivia`,1065,1195);
+      c.textAlign='left';
+      panel(80,1254,1040,541);
+      c.fillStyle='#f4d69e';c.font='500 39px Georgia, serif';c.fillText('My Eight-Film Ranking',122,1317);
+      if(isValidRanking(ranking)){
+        ranking.forEach((id,i)=>{
+          const movie=MOVIES.find(entry=>entry.id===id);
+          const y=1384+i*48;
+          c.fillStyle='#d2ad6c';c.font='700 27px Arial, sans-serif';c.fillText(`${i+1}.`,126,y);
+          c.fillStyle=i===0?'#ffe6b2':'#d9d2c5';c.font=`${i===0?'700':'400'} 26px Arial, sans-serif`;
+          c.fillText(movie?.short||id,186,y);
+        });
+      } else {
+        c.fillStyle='#c9bbaa';c.font='24px Arial, sans-serif';c.fillText('My movie rankings have not been saved yet.',125,1391);
+      }
+      c.textAlign='center';c.fillStyle='#bda782';c.font='21px Georgia, serif';
+      c.fillText('A magical marathon worth remembering  ✦  Unofficial fan-made keepsake',W/2,1850);
+      return canvas;
+    }
+    async function showMarathonSummary() {
+      if(!activePlayer||!activeUser)return;
+      const button=$('openSummaryBtn');button.disabled=true;
+      try {
+        if(rankDirty) {try{await persistRankings();}catch(err){showToast('Ranking could not save; summary will use current list.');}}
+        let player=activePlayer;
+        const {data,error}=await db.from('players').select('id,wizard_name,house,counts').eq('id',activeUser.id).single();
+        if(!error && data)player=data;
+        // This is a snapshot, not an irreversible finish/reset action.
+        summaryCanvas=makeSummaryCanvas(player,(rankSaved||rankDirty)?rankOrder:null);
+        $('summaryPreview').src=summaryCanvas.toDataURL('image/png');
+        $('summaryMessage').textContent='Your results are shown exactly as of this moment. Click Save to download the image.';
+        openModal('summaryModal');
+      } catch(err) {console.error('Summary failed:',err);showToast('Could not create summary image.');}
+      finally {button.disabled=false;}
+    }
+    $('openSummaryBtn').addEventListener('click',showMarathonSummary);
+    $('closeSummaryBtn').addEventListener('click',closeModals);
+    $('saveSummaryBtn').addEventListener('click',()=>{
+      if(!summaryCanvas) return;
+      const saveBlob=blob=>{
+        if(!blob){showToast('Could not create the PNG.');return;}
+        const url=URL.createObjectURL(blob);const a=document.createElement('a');
+        a.href=url;a.download='hogwarts-marathon-'+(activePlayer?.wizard_name||'my-summary').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.png';
+        document.body.append(a);a.click();a.remove();
+        setTimeout(()=>URL.revokeObjectURL(url),60000);
+        $('summaryMessage').textContent='Image saved. On some phones it may appear in Downloads or ask where to save.';
+      };
+      if(summaryCanvas.toBlob)summaryCanvas.toBlob(saveBlob,'image/png');
+      else {const a=document.createElement('a');a.href=summaryCanvas.toDataURL('image/png');a.download='hogwarts-marathon-summary.png';a.click();}
+    });
+    for(const id of ['mapModal','summaryModal']) {
+      $(id).addEventListener('click',event=>{if(event.target===$(id))closeModals();});
+    }
+    document.addEventListener('keydown',event=>{
+      if(event.key==='Escape' && (!$('mapModal').classList.contains('hidden') || !$('summaryModal').classList.contains('hidden')))closeModals();
+    });
+
     async function startup() {
       showScreen('houseScreen');
       if (!db) {
@@ -475,4 +868,3 @@
   </script>
 </body>
 </html>
-/
